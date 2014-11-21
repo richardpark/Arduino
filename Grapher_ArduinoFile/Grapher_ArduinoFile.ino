@@ -25,6 +25,8 @@
 
  http://www.arduino.cc/en/Tutorial/Graph
  */
+ 
+ // here is a new comment!
 
 void setup() {
   // initialize the serial communication:
