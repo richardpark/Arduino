@@ -1,24 +1,22 @@
 
  // Graphing sketch
  
- 
- // This program takes ASCII-encoded strings
- // from the serial port at 9600 baud and graphs them. It expects values in the
- // range 0 to 1023, followed by a newline, or newline and carriage return
- 
- // Created 20 Apr 2005
- // Updated 18 Jan 2008
- // by Tom Igoe
- // This example code is in the public domain.
+ // By Richard Park
  
  import processing.serial.*;
  
  Serial myPort;        // The serial port
- int xPos = 1;         // horizontal position of the graph
+ 
+ int margin = 100;
+ int xPos = margin;         
+ int xInc = 20;
+ int yInc = 20;
+ int xMax = 200;
+ int yMax = 1000;
  
  void setup () {
    // set the window size:
-   size(800, 600);        
+   size(1000, 800);        
    // Create a new file in the sketch directory
    //output = createWriter("positions.txt"); 
    // List all the available serial ports
@@ -32,6 +30,31 @@
    myPort.bufferUntil('\n');
    // set inital background:
    background(191 , 239 , 255);
+   
+   
+   rect(margin,margin,width - margin*2 ,height - margin*2 );
+   
+   
+   
+   for(int y = 0; y <= yInc; y++){
+     line(margin - 10, margin + y*((height - margin*2)/yInc) , margin, margin + y*((height - margin*2)/yInc));
+     textSize(10);
+     fill(0);
+     textAlign(CENTER,CENTER);
+     text(yMax - (yMax/yInc)*y, margin - 25, margin + y*((height - margin*2)/yInc));
+   }
+   
+   for(int x = 0; x <= xInc; x++){
+     line( margin + x*(width - margin*2)/xInc , height - margin, margin + x*(width - margin*2)/xInc, height - margin +10 );
+     textSize(10);
+     fill(0);
+     textAlign(CENTER,CENTER);
+     text(0 + (xMax/xInc)*x, margin + x*(width - margin*2)/xInc , height - margin + 20);
+   }
+   
+
+
+   
  }
  
  void draw () {
@@ -47,16 +70,42 @@
      inString = trim(inString);
      // convert to an int and map to the screen height:
      float inByte = float(inString); 
-     inByte = map(inByte, 0, 650, 0, height);
+     inByte = map(inByte, 0, yMax, height - margin ,margin);
  
      // draw the line:
      stroke(0 , 139 , 69);
-     ellipse(xPos, height - inByte, 1.5, 1.5);
+     ellipse(xPos, inByte, 1.5, 1.5);
  
      // at the edge of the screen, go back to the beginning:
-       if (xPos >= width) {
-         xPos = 0;
-         background(191 , 239 , 255); 
+       if (xPos >= width-margin) {
+         xPos = margin;
+         
+         background(191 , 239 , 255);
+         fill(255);
+         rect(margin,margin,width - margin*2 ,height - margin*2 );
+         
+   
+   for(int y = 0; y <= yInc; y++){
+     line(margin - 10, margin + y*((height - margin*2)/yInc) , margin, margin + y*((height - margin*2)/yInc));
+     textSize(10);
+     fill(0);
+     textAlign(CENTER,CENTER);
+     text(yMax - (yMax/yInc)*y, margin - 25, margin + y*((height - margin*2)/yInc));
+   }
+   
+   for(int x = 0; x <= xInc; x++){
+     line( margin + x*(width - margin*2)/xInc , height - margin, margin + x*(width - margin*2)/xInc, height - margin +10 );
+     textSize(10);
+     fill(0);
+     textAlign(CENTER,CENTER);
+     text(0 + (xMax/xInc)*x, margin + x*(width - margin*2)/xInc , height - margin + 20);
+   }
+   
+        
+   
+
+  
+   
        }
      
      else {
